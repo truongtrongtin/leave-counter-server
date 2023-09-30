@@ -1,0 +1,45 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: projects/96573011708/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider
+          service_account: github-actions-service-account@my-project-1540367072726.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - id: deploy
+        name: Use gcloud CLI
+        run: >
+          gcloud functions deploy leave-counter-server
+          --docker-registry=artifact-registry
+          --trigger-http
+          --entry-point=app
+          --runtime=nodejs20
+          --memory=128MB
+          --region=asia-southeast1
+          --source=.
+          --allow-unauthenticated
+          --security-level=secure-always
+          --set-env-vars GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+          --set-env-vars GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          --set-env-vars GOOGLE_REFRESH_TOKEN=${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          --set-env-vars CALENDAR_ID=${{ secrets.CALENDAR_ID }}
+          --set-env-vars SPREADSHEET_ID=${{ secrets.SPREADSHEET_ID }}
