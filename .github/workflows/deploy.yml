@@ -29,15 +29,14 @@ jobs:
         name: Use gcloud CLI
         run: >
           gcloud functions deploy leave-counter-server
-          --docker-registry=artifact-registry
+          --gen2
           --trigger-http
           --entry-point=app
           --runtime=nodejs20
-          --memory=128MB
+          --memory=128MiB
           --region=asia-southeast1
           --source=.
           --allow-unauthenticated
-          --security-level=secure-always
           --set-env-vars GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
           --set-env-vars GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
           --set-env-vars GOOGLE_REFRESH_TOKEN=${{ secrets.GOOGLE_REFRESH_TOKEN }}
