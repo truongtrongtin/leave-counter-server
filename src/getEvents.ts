@@ -1,5 +1,13 @@
 import { getAccessToken } from "./getAccessToken.js";
-import { CalendarEvent } from "./types.js";
+
+type CalendarEvent = {
+  summary: string;
+  start: { date: string };
+  end: { date: string };
+  extendedProperties?: {
+    private?: Record<string, string>;
+  };
+};
 
 export async function getCalendarEvents(query: URLSearchParams) {
   try {
