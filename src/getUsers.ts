@@ -7,13 +7,12 @@ export async function getUsers() {
       valueRenderOption: "UNFORMATTED_VALUE",
       dateTimeRenderOption: "FORMATTED_STRING",
     });
-    const sheetName = new Date().getFullYear();
-    const sheetValuesResponse = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${process.env.SPREADSHEET_ID}/values/${sheetName}?${query}`,
+    const response = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${process.env.SPREADSHEET_ID}/values/${process.env.SHEET_NAME}?${query}`,
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
-    const sheetValues = await sheetValuesResponse.json();
-    if (!sheetValuesResponse.ok) throw sheetValues;
+    const sheetValues = await response.json();
+    if (!response.ok) throw sheetValues.error;
     const [header, ...rows] = sheetValues.values;
     const result: Record<string, string>[] = [];
     for (const rowValues of rows) {

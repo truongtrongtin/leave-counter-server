@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { getCalendarEvents } from "./getEvents.js";
+import { getCalendarEvents } from "./getCalendarEvents.js";
 import { getUserInfo } from "./getUserInfo.js";
 import { getUsers } from "./getUsers.js";
 
@@ -41,8 +41,8 @@ app.use("/events", async (req: Request, res: Response) => {
 app.use("/users", async (req: Request, res: Response) => {
   try {
     const users = await getUsers();
-    return res.status(200).json(users);
+    res.status(200).json(users);
   } catch (error) {
-    return res.status(400).json(error);
+    res.status(400).json(error);
   }
 });

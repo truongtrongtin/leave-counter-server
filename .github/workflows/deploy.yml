@@ -42,3 +42,4 @@ jobs:
           --set-env-vars GOOGLE_REFRESH_TOKEN=${{ secrets.GOOGLE_REFRESH_TOKEN }}
           --set-env-vars CALENDAR_ID=${{ secrets.CALENDAR_ID }}
           --set-env-vars SPREADSHEET_ID=${{ secrets.SPREADSHEET_ID }}
+          --set-env-vars SHEET_NAME=${{ secrets.SHEET_NAME }}
