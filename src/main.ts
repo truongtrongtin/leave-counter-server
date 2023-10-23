@@ -28,7 +28,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-app.use("/events", async (req: Request, res: Response) => {
+app.get("/events", async (req: Request, res: Response) => {
   try {
     const query = new URLSearchParams(req.query as Record<string, string>);
     const events = await getCalendarEvents(query);
@@ -38,7 +38,7 @@ app.use("/events", async (req: Request, res: Response) => {
   }
 });
 
-app.use("/users", async (req: Request, res: Response) => {
+app.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await getUsers();
     res.status(200).json(users);
@@ -46,3 +46,15 @@ app.use("/users", async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 });
+
+// https://cloud.google.com/functions/docs/configuring/env-var#newer_runtimes
+const isOnGoogleCloud = Boolean(
+  process.env.K_SERVICE && process.env.K_REVISION
+);
+
+if (!isOnGoogleCloud) {
+  const port = Number(process.env.PORT) || 3001;
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}!`);
+  });
+}
