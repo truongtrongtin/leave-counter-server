@@ -46,15 +46,3 @@ app.get("/users", async (req: Request, res: Response) => {
     res.status(400).json(error);
   }
 });
-
-// https://cloud.google.com/functions/docs/configuring/env-var#newer_runtimes
-const isOnGoogleCloud = Boolean(
-  process.env.K_SERVICE && process.env.K_REVISION
-);
-
-if (!isOnGoogleCloud) {
-  const port = Number(process.env.PORT) || 3001;
-  app.listen(port, () => {
-    console.log(`Listening on port ${port}!`);
-  });
-}
